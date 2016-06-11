@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Login
+{% endblock %}
+{% block content %}
+    <div style="background: #222A0A; height: 100%; padding-top: 10px">
+    <div style="background: white; height: 100%; padding: 0" class="center">
+        <div style="background: #A9D0F5; height: 100px;  margin: 0; padding: 0">
+            <p align="center" style="text-align: center; font-size: 55px; padding-top: 13px; padding-bottom: 150px">HonestWrite</p>
+
+                            {% if notlogin %}
+        <div id="alert1" class="alert alert-success center fade in small" style="width: 50%">
+   <a href="/" id="close1" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Please check User ID and Password.</strong>
+    </div><br/>
+    {% endif %}
+    <div align="center">
+    <form class="form" method="post" action=".">{% csrf_token %}
+        <div class="form-group" style="width: 40%">
+            <input type="text" id="username" name="username" class="form-control" style="font-size: large; color: black;" placeholder="Enter Username" required/>
+        </div><br/>
+        <div class="form-group" style="width: 40%">
+            <input type="password" id="password" name="password" class="form-control" style="font-size: large; color: black" placeholder="Enter Password" required/>
+        </div><br/>
+        <div class="form-group" style="width: 40%">
+        <input type="submit" class="btn btn-primary btn-lg btn-block" value="Login" style="text-align: center"/><br/>
+        <a href="/register" class="btn btn-primary btn-lg btn-block">Register</a>
+            </div>
+    </form>
+        </div>
+    <br>
+    <a href="/forgotpwd" style="text-align: center; font-size: 14px">Forgot Password?</a>
+
+    </div>
+    </div>
+</div>
+{% endblock %}

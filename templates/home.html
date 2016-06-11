@@ -1,0 +1,12 @@
+{% extends "default.html" %}
+{% block title %}Welcome {% endblock %}
+{% block head %}Welcome {% endblock %}
+{% load tags %}
+{% block content %}
+    <h3>Current Classes</h3>
+    <ul><br>
+    {% for item in classob %}
+    <li><a href="/home/class/{{ item.id }}">{{ item.id }}</a> </li><br>
+    {% endfor %}
+    </ul>
+{% endblock %}

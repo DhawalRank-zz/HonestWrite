@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}User Registration{% endblock %}
+{% block head %}User Registration{% endblock %}
+{% block content %}
+    <div style="padding-left: 40%; padding-top: 3%" xmlns="http://www.w3.org/1999/html">
+    <form method="post" action=".">{% csrf_token %}
+        <div class="form-control"  style="width: 35%;  height: 510px;  border-radius: 5px" align="center">
+            <h2>Register</h2><br>
+            {% if nomatch %}
+                <div id="alert1" class="alert alert-success fade in">
+                <a href="/register/" id="close1" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>Passwords did not match. Try again.</strong>
+                </div>
+            {% endif %}
+            {% if userpresent %}
+                <div id="alert1" class="alert alert-success fade in" style="width: 30%; border-radius: 5px" align="center">
+                <a href="/register/" id="close1" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                    <strong>UserName already present</strong>
+                </div>
+            {% endif %}
+            <div class="form-group">
+                <input type="text" name="username" id="username" placeholder="Enter Username" class="form-control" required>
+            </div><br>
+            <div class="form-group">
+                    <input type="text" name="emailid" id="emailid" placeholder="Enter Email ID" class="form-control" required>
+            </div><br>
+            <div class="form-group">
+                    <input type="password" name="password1" id="password1" placeholder="Enter Password" class="form-control" required>
+            </div><br>
+            <div class="form-group">
+                    <input type="password" name="password2" id="password2" placeholder="Confirm Password" class="form-control" required>
+            </div><br>
+            <div class="checkbox">
+                    <input type="checkbox" name="is_staff" id="is_staff" value="Is Staff">Is Staff? </input>
+            </div><br>
+            <input type="submit" class="btn btn-primary" value="Register" />
+            <a href="/" class="btn btn-primary">Login</a>
+        </div>
+    </form>
+     </div>
+{% endblock %}

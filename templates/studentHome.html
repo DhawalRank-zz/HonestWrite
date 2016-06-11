@@ -1,0 +1,9 @@
+{% extends "studentDefault.html" %}
+{% block title %}Welcome {% endblock %}
+{% block head %}Welcome {% endblock %}
+{% load tags %}
+{% block content %}
+    {% for user in userob %}
+    <h1 style="padding-left: 10px">Welcome {{ user.first_name }} {{ user.last_name }}</h1>
+    {% endfor %}
+{% endblock %}
