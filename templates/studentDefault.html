@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 <html>
     <head>
         <title>
@@ -35,12 +35,13 @@
 
         <div class="modal-body">
 
-          <form role="form" action="." method="post">
+          <form role="form" id = "register-form" action="/studentHome/registerclass/" method="post">{% csrf_token %}
             <div class="form-group" style="padding-bottom: 5%; padding-top: 3%">
               <label for="classid"><span class="glyphicon glyphicon-user"></span> Class ID</label>
-              <br/><input type="text" class="form-control" id="classid" placeholder="Class ID">
+              <br/><input type="text" class="form-control" id="classid" name="classid" placeholder="Class ID">
+                <span id='checkclass_status'></span>
             </div>
-              <button type="submit" class="btn btn-success btn-block"><span class="glyphicon glyphicon-save-file"></span> Register</button>
+              <button type="submit" id="submitButton" name="submitButton" class="btn btn-success btn-block" disabled><span class="glyphicon glyphicon-save-file"></span> Register</button>
           </form>
         </div>
       </div>
@@ -48,23 +49,63 @@
     </div>
   </div>
 </div>
-        <script>
-$(document).ready(function(){
-    $("#registerClass").click(function(){
-        $("#myModal").modal();
-    });
-});
-        </script>
              </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/profile/"><span class="glyphicon glyphicon-user"></span> My Account</a></li>
+                    <li><a href="/studentHome/profile/"><span class="glyphicon glyphicon-user"></span> My Account</a></li>
                     <li><a href="/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
                 </ul>
             </div>
          </nav>
         {% block content %}{% endblock %}
+    <script type="text/javascript">
+        function csrfSafeMethod(method) {
+            // these HTTP methods do not require CSRF protection
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+        $.ajaxSetup({
+            data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+        });
+        $(document).ready(function(){
+            $("#registerClass").click(function(){
+                $("#myModal").modal();
+            });
+        });
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                         break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        var csrftoken = getCookie('csrftoken');
+        var previous_classid = '';
+        var in_ajax = 0;
+        function checkClass() {
+            var classid = $("#classid").val();
+                if ((previous_classid != classid) && (classid != '') && (in_ajax != 1)) {
+                in_ajax = 1;
+                $("#checkclass_status").html("<img src='/core/static/load-icon.gif' />");
+                $("#checkclass_status").load('/studentHome/checkclass/', {classid: classid}, function() {in_ajax = 0;});
+            }
+            previous_classid = classid;
+        }
+        function checkValues() {
+            var val1 = document.getElementById('checkclass_status').innerHTML;
+            document.getElementById("submitButton").disabled = val1 != "You can register to this class";
 
-
-                    <!-- Create content block -->
+        }
+        $(function() {
+            setInterval("checkClass()", 100);
+            setInterval("checkValues()", 10 );
+        });
+        </script>
     </body>
 </html>

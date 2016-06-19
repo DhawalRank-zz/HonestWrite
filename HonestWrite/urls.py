@@ -13,9 +13,8 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
 from django.contrib import *
-
+from django.contrib.auth.admin import *
 from core.views import *
 
 urlpatterns = [
@@ -31,5 +30,8 @@ urlpatterns = [
     url(r'^addclass/$', addclass),
     url(r'^addclass/addclass1/$', addclass),
     url(r'^profile/$', profile),
-    url(r'^home/class/(?P<class_id>[0-9]+?)/$', viewclass)
+    url(r'^home/class/(?P<class_id>[0-9]+?)/$', viewclass),
+    url(r'^studentHome/checkclass/$', checkclass),
+    url(r'^studentHome/validateclass/$', validateclass),
+    url(r'^studentHome/profile/$', stuprofile)
 ]

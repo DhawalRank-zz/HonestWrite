@@ -6,7 +6,7 @@
 #   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
 from __future__ import unicode_literals
-
+from django.contrib.postgres.fields import ArrayField
 from django.db import models
 
 
@@ -141,14 +141,20 @@ class FClass(models.Model):
         db_table = 'fclass'
         unique_together = (('id', 'username'),)
 
+    @property
     def user_name(self):
         try:
             return self.username.username
         except ValueError:
             return self.username.id
+    def class_id(self):
+        try:
+            return self.id
+        except ValueError:
+            return self.id
 
-    def __str__(self):
-        return self.username.username
+    def __int__(self):
+        return self.id
 
 
 class UFaculty(models.Model):
@@ -180,6 +186,57 @@ class stuClass(models.Model):
     class Meta:
         managed = False
         db_table = 'stuclass'
+
+    def class_name(self):
+        try:
+            return self.classid.id
+        except ValueError:
+            return self.classid.id
+
+    def __str__(self):
+        return str(self.classid.id)
+
+class CQuestions(models.Model):
+    qid = models.AutoField(primary_key=True)
+    classid = models.ForeignKey(FClass, null=False, db_column='classid')
+    qstring = models.CharField(max_length=200, null=False, blank=False)
+    option = ArrayField(models.CharField(max_length=200), blank=False, null=False)
+    answers = ArrayField(models.CharField(max_length=200), blank=False, null=False)
+
+    class Meta:
+        managed = False
+        db_table = 'cquestions'
+
+
+class CResults(models.Model):
+    rid = models.AutoField(primary_key=True)
+    classid = models.ForeignKey(FClass, null=False, db_column='classid')
+    username = models.ForeignKey(AuthUser, null=False, db_column='username')
+    grade = models.CharField(null=False, blank=False, default='TBD', max_length=10)
+
+    class Meta:
+        managed = False
+        db_table = 'cresults'
+
+    def user_name(self):
+        try:
+            return self.username.username
+        except ValueError:
+            return self.username.id
+
+    def __str__(self):
+        return self.username.username
+
+class UStudent(models.Model):
+    id = models.AutoField(primary_key=True)
+    username = models.ForeignKey(AuthUser, db_column='username', null=True)
+    s_school = models.CharField(max_length=40)
+    s_faculty = models.CharField(max_length=40)
+    s_major = models.CharField(max_length=40)
+
+    class Meta:
+        managed = False
+        db_table = 'ustudent'
 
     def user_name(self):
         try:
