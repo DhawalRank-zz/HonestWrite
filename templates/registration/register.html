@@ -18,6 +18,12 @@
                     <strong>UserName already present</strong>
                 </div>
             {% endif %}
+        <div class="form-group">
+                <input type="text" name="first_name" id="first_name" placeholder="Enter Firstname" class="form-control" required>
+            </div><br>
+        <div class="form-group">
+                <input type="text" name="last_name" id="last_name" placeholder="Enter Lastname" class="form-control" required>
+            </div><br>
             <div class="form-group">
                 <input type="text" name="username" id="username" placeholder="Enter Username" class="form-control" required>
             </div><br>
@@ -30,8 +36,8 @@
             <div class="form-group">
                     <input type="password" name="password2" id="password2" placeholder="Confirm Password" class="form-control" required>
             </div><br>
-            <div class="checkbox">
-                    <input type="checkbox" name="is_staff" id="is_staff" value="Is Staff">Is Staff? </input>
+                    <div class="checkbox">
+        <input type="checkbox" id="is_staff" name="is_staff" value="True"><label for="is_staff">Is Staff?</label>
             </div><br>
             <input type="submit" class="btn btn-primary" value="Register" />
             <a href="/" class="btn btn-primary">Login</a>

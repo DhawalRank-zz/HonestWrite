@@ -3,27 +3,40 @@
     <head>
         <title>
             {% block title %}{% endblock %}</title>
-            <link rel="stylesheet" type="text/css" href="/core/static/css/bootstrap.min.css"/>
-        <script src="/core/static/jquery.min.js"></script>
-        <script type="text/javascript" src="/core/static/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="/core/static/schools.js"></script>
+    <script type="text/javascript" src="/core/static/schools.js"></script>
+                  <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="/core/static/css/materialize.min.css"  media="screen,projection"/>
+
+
 </head>
     <body background="/core/static/background.jpg">
-         <nav class="navbar navbar-inverse">
+         <div class="navbar-fixed">
+         <nav class="nav-wrapper" style="padding-left: 0">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="/home/">HonestWrite</a>
-                </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/home/">Dashboard</a></li>
-                <li><a href="/addclass/">Classes</a></li>
-            </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/profile/"><span class="glyphicon glyphicon-user"></span> My Account</a></li>
-                    <li><a href="/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                     <ul class="nav navbar-nav">
+                         <li class="waves-effect waves-light"><a href="/home/" style="pointer-events: none">HonestWrite</a></li>
+                         <li class="waves-effect waves-light"><a href="/home/">Dashboard</a></li>
+                         <li class="waves-effect waves-light"><a href="/addclass/">Classes</a></li>
+                         <li class="waves-effect waves-light"><a href="/reports/">Reports</a></li>
+                     </ul>
+                <ul class="right">
+                    <li style="padding-top: 2.5%"><span class="span-logo"><img style="border-radius: 50%" class="circular-pic" src="{{ request.session.profilepic }}" width="50" height="50"/></span></li>
+                    <li class="waves-effect waves-light"><a class="active" href="/profile/">{{ request.user.first_name }} {{ request.user.last_name }}</a></li>
+                    <li class="waves-effect waves-light"><a class="active" href="/logout/">Logout</a></li>
                 </ul>
             </div>
          </nav>
-        {% block content %}{% endblock %}                   <!-- Create content block -->
+         </div>
+        {% block content %}{% endblock %}
+         <!-- Create content block -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+         <script type="application/javascript" src="/core/static/js/bootstrap.min.js"></script>
+      <script type="text/javascript" src="/core/static/js/materialize.min.js"></script>
+         <script type="text/javascript">
+            $(document).ready(function() {
+    $('select').material_select();
+});
+            </script>
     </body>
 </html>

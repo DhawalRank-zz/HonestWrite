@@ -1,8 +1,5 @@
 {% extends "studentDefault.html" %}
 {% block title %}Welcome {% endblock %}
-{% block head %}Welcome
-<script type="text/javascript" src="/core/static/schools.js"></script>
-{% endblock %}
 {% load tags %}
 {% block content %}
     <br><br>
@@ -27,7 +24,7 @@
         <strong>Record Updated.</strong>
     </div>
     {% endif %}
-    <form action="/studentHome/profile/" method="post" id="aclass">{% csrf_token %}
+    <form action="/studentHome/profile/" method="post" id="aclass" enctype="multipart/form-data">{% csrf_token %}
     <div class="form-control" style="width: 30%;  height: 690px; border-radius: 5px" align="center">
         <h2>Edit Profile</h2><br>
         <div class="form-group">
@@ -37,10 +34,10 @@
             <input type="text" name="last_name" id="last_name" value="{{ values.last_name }}" placeholder="Enter Last Name" class="form-control">
         </div><br>
           <div class="form-group">
-           <select id="stype" name ="stype" class="form-control"></select>
+           <select id="stype" name ="stype" class="form-control" onchange="pSchool()"><option></option></select>
         </div><br>
         <div class="form-group">
-           <select id="school" name ="school" class="form-control"><option>{{ values.school }}</option></select>
+           <select id="school" name ="school" ><option>{{ values.school }}</option></select>
         </div><br>
         <div class="form-group">
            <input type="text" name="faculty" id="faculty" value="{{ values.faculty }}" placeholder="Enter Faculty" class="form-control">
@@ -51,12 +48,16 @@
         <div class="form-group">
             <input type="text" name="emailid" id="emailid" value="{{ values.emailid }}" placeholder="Enter Email ID" class="form-control">
         </div><br><br>
+        <input type="file" name="profilepic" id="profilepic"><br><br>
         <input type="submit" class="btn btn-primary btn-lg" value="Submit"/>
     </div>
     </form>
 
     </div>
     <script language="javascript">
-			populateStype("stype", "school");
+             populateStype("stype");
+         function pSchool() {
+             populateSchool("stype", "school")
+         }
 </script>
 {% endblock %}

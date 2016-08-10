@@ -1,10 +1,74 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<h1>Change Password</h1>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Login
+{% endblock %}
+{% block content %}
+<div align="center" style="background: #222A0A; height: 950px">
+    <div align="center" style="padding-top: 5px">
+            <div align="center" style="background: #D9E5EF; text-align: center; font-size: 55px; width: 45%;padding-top: 10px; border-bottom:2px solid blue;" class="flow-text">HonestWrite</div>
+        <div style="width: 45%; height: 850px; background: white" align="center">
+            <div align="center"><br/><br/>
+                <h4>Request Password</h4>
+            <form action="." method="post" id="changepwd">{% csrf_token %}
+                <div class="form-group" style="width: 40%; padding-top: 1%">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username for retrieving password" required/>
+                    <span id="messages"></span>
+                    </div><br/>
+                <div class="form-group" style="width: 40%">
+                    <button type="submit" id="subuname" name="subuname" class="btn btn-primary" disabled>Request Password</button>
+                    <a href="/" class="btn btn-primary">Login</a>
+                </div>
+            </form>
+            </div>
+        </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript">
+    $.ajaxSetup({
+    	  data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    	});
+    $.ajaxSetup({ 
+        beforeSend: function(xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        } 
+   });
+    var previous_username = '';
+    var in_ajax = 0;
+    function checkUsername() {
+        var username = $("#username").val();
+        if ((previous_username != username) && (username != '') && (in_ajax != 1)) {
+                in_ajax = 1;
+                $("#messages").html("<img src='/core/static/load-icon.gif' />");
+                $("#messages").load('/checkuname/', {username: username}, function() {in_ajax = 0;});
+            }
+            previous_username = username;
+    }
+     function checkValues() {
+            var val1 = document.getElementById('messages').innerHTML;
+            document.getElementById("subuname").disabled = val1 != "Your password will be sent your email.";
+
+        }
+    $(function() {
+            setInterval("checkUsername()", 10 );
+            setInterval("checkValues()", 10);
+        });
+    </script>
+{% endblock %}

@@ -1,91 +1,61 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>
-            {% block title %}{% endblock %}</title>
-            <link rel="stylesheet" type="text/css" href="/core/static/css/bootstrap.min.css"/>
-        <link rel="stylesheet" type="text/css" href="/core/static/css/bootstrap-responsive.min.css"/>
-        <script src="/core/static/jquery.min.js"></script>
-        <script type="text/javascript" src="/core/static/js/bootstrap.min.js"></script>
+    <head>{% block head %}
+          <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="/core/static/css/materialize.min.css"  media="screen,projection"/>
         <script type="text/javascript" src="/core/static/schools.js"></script>
-</head>
+        {% endblock %}
+ </head>
     <body background="/core/static/background.jpg">
          <nav class="navbar navbar-inverse">
             <div class="container-fluid">
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="/studentHome/">HonestWrite</a>
-                </div>
-            <ul class="nav navbar-nav">
-                <li class="active"><a href="/studentHome/">Dashboard</a></li>
-
-                <li><a href="#" id="registerClass">Register to a Class</a></li>
-                                <div class="container">
+                    <ul class="nav navbar-nav">
+                    <li class="waves-effect waves-light"><a>HonestWrite</a></li>
+                <li><a href="/studentHome/" class="waves-effect waves-light">Dashboard</a></li>
+                        <li><a href="#myModal" id="registerClass" class="waves-effect waves-light modal-trigger">Register to a Class</a></li>
                      <!-- Trigger the modal with a button -->
   <!-- Modal -->
-  <div class="modal fade" id="myModal" role="dialog">
-    <div class="modal-dialog">
 
+</ul>
+                <ul class="right">
+                    <li style="padding-top: 2.5%"><span class="span-logo"><img style="border-radius: 50%" class="circular-pic" src="{{ request.session.profilepic }}" width="50" height="50"/></span></li>
+                    <li><a href="/studentHome/profile/"><span class="waves-effect waves-light"></span> {{ request.user.first_name }} {{ request.user.last_name }}</a></li>
+                    <li><a href="/logout/"><span class="waves-effect waves-light"></span> Logout</a></li>
+                </ul>
+            </div>
+                </div>
+         </nav>
+           <div class="modal" id="myModal">
       <!-- Modal content-->
       <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <span><h3>Register a Class!!</h3></span>
-        </div>
-
-
-        <div class="modal-body">
-
+          <h3 style="color: black">Register a Class!!</h3>
           <form role="form" id = "register-form" action="/studentHome/registerclass/" method="post">{% csrf_token %}
             <div class="form-group" style="padding-bottom: 5%; padding-top: 3%">
-              <label for="classid"><span class="glyphicon glyphicon-user"></span> Class ID</label>
-              <br/><input type="text" class="form-control" id="classid" name="classid" placeholder="Class ID">
-                <span id='checkclass_status'></span>
+              <label for="classid" style="color: black">Class ID</label>
+              <input type="text" id="classid" name="classid" style="color: black">
+                <span id='checkclass_status' style="color: black"></span>
             </div>
               <button type="submit" id="submitButton" name="submitButton" class="btn btn-success btn-block" disabled><span class="glyphicon glyphicon-save-file"></span> Register</button>
           </form>
         </div>
       </div>
-
-    </div>
-  </div>
-</div>
-             </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="/studentHome/profile/"><span class="glyphicon glyphicon-user"></span> My Account</a></li>
-                    <li><a href="/logout/"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-                </ul>
-            </div>
-         </nav>
-        {% block content %}{% endblock %}
+      <div style="padding-left: 15px">
+        {% block content %}{% endblock %}</div>
+         <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="/core/static/js/materialize.min.js"></script>
     <script type="text/javascript">
-        function csrfSafeMethod(method) {
-            // these HTTP methods do not require CSRF protection
-            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-        }
+        $(document).ready(function() {
+    $('select').material_select();
+});
+        $(document).ready(function(){
+            // the "href" attribute of .modal-trigger must specify the modal ID that wants to be triggered
+            $('.modal-trigger').leanModal();
+        });
         $.ajaxSetup({
             data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
         });
-        $(document).ready(function(){
-            $("#registerClass").click(function(){
-                $("#myModal").modal();
-            });
-        });
-        function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
-                var cookies = document.cookie.split(';');
-                for (var i = 0; i < cookies.length; i++) {
-                    var cookie = jQuery.trim(cookies[i]);
-                    // Does this cookie string begin with the name we want?
-                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                         break;
-                    }
-                }
-            }
-            return cookieValue;
-        }
-        var csrftoken = getCookie('csrftoken');
         var previous_classid = '';
         var in_ajax = 0;
         function checkClass() {

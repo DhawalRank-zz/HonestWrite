@@ -2,35 +2,37 @@
 {% block title %}Login
 {% endblock %}
 {% block content %}
-    <div style="background: #222A0A; height: 100%; padding-top: 10px">
-    <div style="background: white; height: 100%; padding: 0" class="center">
-        <div style="background: #A9D0F5; height: 100px;  margin: 0; padding: 0">
-            <p align="center" style="text-align: center; font-size: 55px; padding-top: 13px; padding-bottom: 150px">HonestWrite</p>
-
+    <div align="center" style="background: #222A0A; height: 950px">
+    <div align="center" style="padding-top: 5px">
+            <div align="center" style="background: #D9E5EF; text-align: center; font-size: 55px; width: 55%;padding-top: 10px; border-bottom:2px solid blue;" class="flow-text">HonestWrite</div>
+    <div style="padding-top: 5%; width: 55%; height: 850px; background: white" align="center">
                             {% if notlogin %}
-        <div id="alert1" class="alert alert-success center fade in small" style="width: 50%">
+        <div id="alert1"  style="width: 30%; height: 5%; padding-top: 0.5%" align="center" class="card red-text center">
    <a href="/" id="close1" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-        <strong>Please check User ID and Password.</strong>
+        <span>Please check User ID and Password.</span>
+    </div><br/>
+    {% endif %}
+        {% if emailSent %}
+        <div id="alert1" class="card red-text center" style="width: 30%; height: 5%; padding-top: 0.5%">
+   <a href="/" id="close1" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <strong>Email was successfully sent.</strong>
     </div><br/>
     {% endif %}
     <div align="center">
     <form class="form" method="post" action=".">{% csrf_token %}
-        <div class="form-group" style="width: 40%">
+        <div class="form-group" style="width: 45%">
             <input type="text" id="username" name="username" class="form-control" style="font-size: large; color: black;" placeholder="Enter Username" required/>
         </div><br/>
-        <div class="form-group" style="width: 40%">
+        <div class="form-group" style="width: 45%">
             <input type="password" id="password" name="password" class="form-control" style="font-size: large; color: black" placeholder="Enter Password" required/>
         </div><br/>
-        <div class="form-group" style="width: 40%">
-        <input type="submit" class="btn btn-primary btn-lg btn-block" value="Login" style="text-align: center"/><br/>
-        <a href="/register" class="btn btn-primary btn-lg btn-block">Register</a>
-            </div>
+        <button type="submit" class="btn green" style="width: 45%">Login</button><br/><br/>
+        <a href="/register" class="btn green" style="width: 45%">Register</a>
     </form>
         </div>
     <br>
     <a href="/forgotpwd" style="text-align: center; font-size: 14px">Forgot Password?</a>
-
-    </div>
-    </div>
 </div>
+    </div>
+    </div>
 {% endblock %}

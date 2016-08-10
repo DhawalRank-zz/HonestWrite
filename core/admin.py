@@ -4,3 +4,4 @@ from core.models import *
 admin.site.register(stuClass)
 admin.site.register(CQuestions)
 admin.site.register(CResults)
+admin.site.register(FClass)

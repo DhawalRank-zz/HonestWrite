@@ -4,8 +4,8 @@
     <data-source name="PostgreSQL - honestwritedb@localhost" uuid="b992e463-cf66-4f0a-ae10-9e07993dbc52">
       <secret-storage>master_key</secret-storage>
       <user-name>postgres</user-name>
-      <schema-pattern>honestwritedb.pg_catalog honestwritedb.public</schema-pattern>
-      <default-schemas>honestwritedb.public</default-schemas>
+      <introspection-scope>honestwritedb:pg_catalog,public</introspection-scope>
+      <resolve-scope>honestwritedb:public</resolve-scope>
     </data-source>
     <data-source name="Django users" uuid="0e663e68-5e04-4237-bc39-42a10cc6a9f3" />
     <data-source name="Django default" uuid="cc7e05cf-5cc2-482a-b9ee-d08c53e025a9">

@@ -8,6 +8,9 @@
 from __future__ import unicode_literals
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
+import settings
+from django.template.defaultfilters import default
+import datetime
 
 
 class AuthGroup(models.Model):
@@ -156,6 +159,9 @@ class FClass(models.Model):
     def __int__(self):
         return self.id
 
+    def __str__(self):
+        return str(self.id)
+
 
 class UFaculty(models.Model):
     id = models.AutoField(primary_key=True)
@@ -163,6 +169,7 @@ class UFaculty(models.Model):
     f_school = models.CharField(max_length=40)
     f_faculty = models.CharField(max_length=40)
     f_major = models.CharField(max_length=40)
+    profilepic = models.FileField(upload_to=settings.MEDIA_ROOT, default='defaultpic.png')
 
     class Meta:
         managed = False
@@ -200,8 +207,8 @@ class CQuestions(models.Model):
     qid = models.AutoField(primary_key=True)
     classid = models.ForeignKey(FClass, null=False, db_column='classid')
     qstring = models.CharField(max_length=200, null=False, blank=False)
-    option = ArrayField(models.CharField(max_length=200), blank=False, null=False)
-    answers = ArrayField(models.CharField(max_length=200), blank=False, null=False)
+    choices = ArrayField(models.CharField(max_length=100), blank=False, null=False)
+    answers = ArrayField(models.CharField(max_length=100), blank=False, null=False, size=1)
 
     class Meta:
         managed = False
@@ -213,6 +220,8 @@ class CResults(models.Model):
     classid = models.ForeignKey(FClass, null=False, db_column='classid')
     username = models.ForeignKey(AuthUser, null=False, db_column='username')
     grade = models.CharField(null=False, blank=False, default='TBD', max_length=10)
+    subdate = models.DateField(max_length=40, default=datetime.datetime.now().date())
+
 
     class Meta:
         managed = False
@@ -233,6 +242,7 @@ class UStudent(models.Model):
     s_school = models.CharField(max_length=40)
     s_faculty = models.CharField(max_length=40)
     s_major = models.CharField(max_length=40)
+    profilepic = models.FileField(upload_to=settings.MEDIA_ROOT, default='defaultpic.png')
 
     class Meta:
         managed = False

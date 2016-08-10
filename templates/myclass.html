@@ -1,0 +1,160 @@
+{% extends "studentDefault.html" %}
+{% block head %}
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="/core/static/css/materialize.min.css"  media="screen,projection"/>
+        <script type="text/javascript" src="/core/static/schools.js"></script>
+<script type="text/javascript">
+function renderQuiz() {
+	  for(var i=0;i<questions.length;i++) {
+	    document.writeln('<li type="1"><p class="question">' + questions[i] + ' <span id="result_' + i + '"><img src="/core/static/blank.gif" style="border:0" alt="" /></span></p></li>');
+	    for(var j=0;j<choices[i].length;j++) {
+	      document.writeln('<input type="radio" name="answer_' + i + '" value="' + choices[i][j] + '" id="answer_' + i + '_' + j + '" class="question_' + i + '" onclick="submitAnswer(' + i + ', this, \'label_' + i + '_' + j + '\')" /><label id="label_' + i + '_' + j + '" for="answer_' + i + '_' + j + '"> ' + choices[i][j] + '</label><br />');
+	    }
+	  }
+	  document.writeln('<p><input type="submit" class="btn" id="submitTest" value="Show Score" onclick="showScore()" /> <input type="submit" class="btn" value="Reset Quiz" onclick="resetQuiz(true)" /></p><p style="display:none"><img src="/core/static/correct.gif" style="border:0" alt="Correct!" /><img src="/core/static/incorrect.gif" style="border:0" alt="Incorrect!" /></p>');
+	}
+	function resetQuiz(showConfirm) {
+	  if(showConfirm)
+	    if(!confirm("Are you sure you want to reset your answers and start from the beginning?"))
+	      return false;
+	  document.location = document.location;
+	}
+	function submitAnswer(questionId, obj, labelId) {
+	  useranswers[questionId] = obj.value;
+	  console.log(useranswers[questionId]);
+	  document.getElementById(labelId).style.fontWeight = "bold";
+	  showResult(questionId);
+	  answered++;
+	}
+	function showResult(questionId) {
+	  if(answers[questionId] == useranswers[questionId]) {
+	    document.getElementById('result_' + questionId).innerHTML = '<img src="/core/static/correct.gif" style="border:0" alt="Correct!" />';
+	  } else {
+	    document.getElementById('result_' + questionId).innerHTML = '<img src="/core/static/incorrect.gif" style="border:0" alt="Incorrect!" />';
+	  }
+	}
+	function showScore() {
+	  if(answered < answers.length) {
+	    alert("You have not correctly answered all of the questions yet!");
+          alert("You have not correctly answered all of the questions yet!");
+          	    $("form").submit(function(e){
+        	e.preventDefault();
+    		});
+	    return false;
+	  }
+	  var questionCount = answers.length;
+	  var correct = 0;
+	  var incorrect = 0;
+	  for(var i=0;i<questionCount;i++) {
+	    if(useranswers[i] == answers[i])
+	      correct++;
+	    else
+	      incorrect++;
+	  }
+	  if(correct != questions.length)
+	  {
+	    alert("You have not correctly answered all of the questions yet!");
+          	    $("form").submit(function(e){
+        	e.preventDefault();
+    		});
+	  }
+	  else{
+	    alert("You have passed the quiz. Your instructor will be updated.");
+	    resetQuiz(true);
+	  }
+	}
+</script>
+{% endblock %}
+{% block content %}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript">
+var useranswers = [];
+var answered = 0;
+var questions = [];
+var choices = [];
+var answers = [];
+var i = 0;
+var classid = 0;
+var questions1 = "{{ questions|escapejs }}";
+console.log(questions1);
+$.each(JSON.parse(questions1), function(key,value) {
+		var j= 0;
+	  	$('#question').append(value.fields.qstring);
+	  	questions[i] = value.fields.qstring;
+	  	classid = value.fields.classid;
+	  	$.each($.parseJSON(value.fields.answers), function(ke,va){
+	  		answers[i] = va;
+	  	});
+	  	choices[i] = [];
+		$.each($.parseJSON(value.fields.choices), function(k,v){
+		  	choices[i][j] = v;
+			j += 1;
+		});
+	  	i += 1;
+	});
+	console.log(answers);
+	console.log(classid);
+	function renderQuiz() {
+	document.writeln("<form action='/submitquiz/' method='post'>{% csrf_token %}");
+	document.writeln("<input type='text' value='" + classid + "' id='classid' name='classid' readonly hidden>");
+	  for(var i=0;i<questions.length;i++) {
+	    document.writeln('<li type="1"><p class="question">' + questions[i] + ' <span id="result_' + i + '"><img src="/core/static/blank.gif" style="border:0" alt="" /></span></p></li>');
+	    for(var j=0;j<choices[i].length;j++) {
+	      document.writeln('<input type="radio" name="answer_' + i + '" value="' + choices[i][j] + '" id="answer_' + i + '_' + j + '" class="question_' + i + '" onclick="submitAnswer(' + i + ', this, \'label_' + i + '_' + j + '\')" /><label id="label_' + i + '_' + j + '" for="answer_' + i + '_' + j + '"> ' + choices[i][j] + '</label><br />');
+	    }
+	  }
+	  document.writeln('<p><input type="submit" class="btn" value="Show Score" onclick="showScore()" /> <input type="button" class="btn" value="Reset Quiz" onclick="resetQuiz(true)" /></p><p style="display:none"><img src="/core/static/correct.gif" style="border:0" alt="Correct!" /><img src="/core/static/incorrect.gif" style="border:0" alt="Incorrect!" /></p>');
+	  document.writeln('</form>');
+	}
+	function resetQuiz(showConfirm) {
+	  if(showConfirm)
+	    if(!confirm("Are you sure you want to reset your answers and start from the beginning?"))
+	      return false;
+	  document.location = document.location;
+	}
+	function submitAnswer(questionId, obj, labelId) {
+	  useranswers[questionId] = obj.value;
+	  console.log(useranswers[questionId]);
+	  document.getElementById(labelId).style.fontWeight = "bold";
+	  showResult(questionId);
+	  answered++;
+	}
+	function showResult(questionId) {
+	  if(answers[questionId] == useranswers[questionId]) {
+	    document.getElementById('result_' + questionId).innerHTML = '<img src="/core/static/correct.gif" style="border:0" alt="Correct!" />';
+	  } else {
+	    document.getElementById('result_' + questionId).innerHTML = '<img src="/core/static/incorrect.gif" style="border:0" alt="Incorrect!" />';
+	  }
+	}
+	function showScore() {
+        if (answered < answers.length) {
+            alert("You have not correctly answered all of the questions yet!");
+            $("form").submit(function (e) {
+                e.preventDefault();
+            });
+            return false;
+        }
+        var questionCount = answers.length;
+        var correct = 0;
+        var incorrect = 0;
+        for (i = 0; i < questionCount; i++) {
+            if (useranswers[i] == answers[i])
+                correct++;
+            else
+                incorrect++;
+        }
+        if (correct == questions.length) {
+            alert("You have passed the quiz. Your instructor will be updated.");
+        }
+        else {
+            alert("You have not correctly answered all of the questions yet!");
+            $("form").submit(function (e) {
+                e.preventDefault();
+            });
+        }
+    }
+renderQuiz();
+	</script>
+{% endblock %}
+
